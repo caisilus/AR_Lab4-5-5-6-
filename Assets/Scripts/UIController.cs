@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,10 +8,13 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     [SerializeField] GameObject buttonCanvas;
+    [SerializeField] GameObject loadingText;
     [SerializeField] Button RotateButtonLeft;
     [SerializeField] Button RotateButtonRight;
     [SerializeField] AddWPSObjects addWPSObjects;
     [SerializeField] XROrigin origin;
+
+    private ArrowController arrowController;
 
     private RotatableObject _closestRotatable = null;
 
@@ -23,17 +27,21 @@ public class UIController : MonoBehaviour
     }
 
     private void Start() {
+        arrowController = GetComponent<ArrowController>();
         buttonCanvas.SetActive(false);
+        loadingText.SetActive(true);
         addWPSObjects.OnWPSInitialized += ActivateCanvas;
     }
 
     private void ActivateCanvas() {
         buttonCanvas.SetActive(true);
+        loadingText.SetActive(false);
     }
 
     private void Update() {
         if (addWPSObjects.InstantiatedObjects.Count == 0) {
             DeactivateRotateButtons();
+            arrowController.closestObject = null;
         }
 
         float minDistance = float.MaxValue;
@@ -48,6 +56,7 @@ public class UIController : MonoBehaviour
         }
 
         _closestRotatable = closestObject.GetComponentInChildren<RotatableObject>();
+        arrowController.closestObject = closestObject;
 
         if (_closestRotatable != null) {
             ActivateRotateButtons();
