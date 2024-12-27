@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     [SerializeField] GameObject buttonCanvas;
-    [SerializeField] GameObject loadingText;
+    [SerializeField] GameObject loadingCanvas;
     [SerializeField] Button RotateButtonLeft;
     [SerializeField] Button RotateButtonRight;
     [SerializeField] AddWPSObjects addWPSObjects;
@@ -29,13 +29,13 @@ public class UIController : MonoBehaviour
     private void Start() {
         arrowController = GetComponent<ArrowController>();
         buttonCanvas.SetActive(false);
-        loadingText.SetActive(true);
+        loadingCanvas.SetActive(true);
         addWPSObjects.OnWPSInitialized += ActivateCanvas;
     }
 
     private void ActivateCanvas() {
         buttonCanvas.SetActive(true);
-        loadingText.SetActive(false);
+        loadingCanvas.SetActive(false);
     }
 
     private void Update() {
